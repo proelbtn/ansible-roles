@@ -1,0 +1,38 @@
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+  - none
+  - swap
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+- name: Add an apt key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+- name: Install source.list
+  template:
+    src: kubernetes.list.j2
+    dest: /etc/apt/sources.list.d/kubernetes.list
+- name: Install kubelet, kubeadm, kubectl
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - kubeadm
+    - kubectl
+    - kubelet
+- name: Configure kubelet
+  template:
+    src: kubelet.default.j2
+    dest: /etc/default/kubelet
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted
