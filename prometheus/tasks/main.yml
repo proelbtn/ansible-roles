@@ -1,0 +1,39 @@
+- name: create a user for prometheus 
+  user:
+    state: present
+    name: prometheus 
+    system: yes
+    home: /opt/prometheus
+    create_home: yes
+- name: download
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.10.0/prometheus-2.10.0.linux-amd64.tar.gz
+    checksum: sha256:f4233783826f18606b79e5cef0686e4a9c2030146a3c7ce134f0add09f5adcb7
+    dest: /opt/prometheus/prometheus-2.10.0.linux-amd64.tar.gz
+    owner: prometheus 
+    group: prometheus 
+  register: tarinfo
+- name: unarchive
+  unarchive:
+    src: "{{ tarinfo.dest }}"
+    dest: /opt/prometheus
+    remote_src: yes
+    owner: prometheus
+    group: prometheus
+- name: create a systemd unit file
+  template:
+    src: ../templates/prometheus.service
+    dest: /opt/prometheus/prometheus-2.10.0.linux-amd64/prometheus.service
+    owner: prometheus 
+    group: prometheus
+- name: create a symlink to the systemd unit file
+  file:
+    src: /opt/prometheus/prometheus-2.10.0.linux-amd64/prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+    state: link
+- name: start prometheus 
+  systemd:
+    name: prometheus 
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

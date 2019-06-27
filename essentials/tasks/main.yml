@@ -1,0 +1,16 @@
+- name: set timezone
+  timezone:
+    name: Asia/Tokyo
+- name: install essential application
+  apt:
+    state: present
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - zsh
+      - neovim
+      - tmux
+      - tree
+      - zip
+      - unzip
+      - ipmitool
