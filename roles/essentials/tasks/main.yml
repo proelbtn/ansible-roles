@@ -1,16 +1,4 @@
-- name: set timezone
-  timezone:
-    name: Asia/Tokyo
-- name: install essential application
-  apt:
-    state: present
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - zsh
-      - neovim
-      - tmux
-      - tree
-      - zip
-      - unzip
-      - ipmitool
+- include_tasks: centos.yml
+  when: ansible_distribution == "CentOS"
+- include_tasks: ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
