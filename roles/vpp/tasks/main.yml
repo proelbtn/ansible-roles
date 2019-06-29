@@ -20,7 +20,9 @@
       - python-pip
       - vpp-api-python
       - vpp-dbg
-      - vpp-config
       - vpp-dev
       - vpp-plugin-core
       - vpp-plugin-dpdk
+- name: install vpp-config
+  pip:
+    name: vpp-config
