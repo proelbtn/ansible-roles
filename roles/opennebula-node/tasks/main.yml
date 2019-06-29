@@ -6,6 +6,7 @@
     packages:
       - opennebula-node
 - name: restart libvirt-bin
-  service:
+  systemd:
     name: libvirt-bin
     state: restarted
+    enabled: yes
