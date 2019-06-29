@@ -17,8 +17,10 @@
     name: "{{ packages }}"
   vars:
     packages:
-      - vpp-plugin-core
+      - python-pip
       - vpp-api-python
       - vpp-dbg
+      - vpp-config
       - vpp-dev
+      - vpp-plugin-core
       - vpp-plugin-dpdk
