@@ -8,6 +8,7 @@
   vars: 
     packages: 
       - ipmitool
+      - git
       - neovim
       - tmux
       - zsh
