@@ -1,0 +1,14 @@
+- name: add an apt key
+  apt_key:
+    url: https://packagecloud.io/fdio/release/gpgkey
+- name: install source.list
+  template:
+    src: ubuntu/fdio.list.j2
+    dest: /etc/apt/sources.list.d/fdio.list
+- name: install vpp
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - vpp
