@@ -12,3 +12,13 @@
   vars:
     packages:
       - vpp
+- name: install vpp's optional packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - vpp-plugin-core
+      - vpp-api-python
+      - vpp-dbg
+      - vpp-dev
+      - vpp-plugin-dpdk
