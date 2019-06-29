@@ -24,5 +24,6 @@
       - vpp-plugin-core
       - vpp-plugin-dpdk
 - name: install vpp-config
-  pip2:
+  pip:
     name: vpp-config
+    executable: /usr/bin/pip
