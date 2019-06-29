@@ -1,0 +1,11 @@
+- name: install some packages
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - opennebula-node
+- name: restart libvirt-bin
+  service:
+    name: libvirt-bin
+    state: restarted

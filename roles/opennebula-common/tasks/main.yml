@@ -1,0 +1,7 @@
+- name: add an apt key
+  apt_key:
+    url: https://downloads.opennebula.org/repo/repo.key
+- name: install source.list
+  template:
+    src: ubuntu/opennebula.list.j2
+    dest: /etc/apt/sources.list.d/opennebula.list

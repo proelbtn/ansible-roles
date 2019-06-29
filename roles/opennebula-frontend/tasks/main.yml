@@ -1,0 +1,19 @@
+- name: install some packages
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages: 
+      - opennebula
+      - opennebula-sunstone
+      - opennebula-gate
+      - opennebula-flow
+- name: install some gems
+  shell: "yes | /usr/share/one/install_gems"
+- name: start opennebula
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - opennebula
+    - opennebula-sunstone
