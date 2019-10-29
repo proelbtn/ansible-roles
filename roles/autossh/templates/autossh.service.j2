@@ -1,0 +1,10 @@
+[Unit]
+Description=Keeps a tunnel to {{ autossh_remote.address }}:{{ autossh_remote.port }}
+After=network.target
+
+[Service]
+User={{ item }}
+ExecStart=/usr/bin/autossh -M 0 -N -q -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -R {{ ssh_remote_listen_port }}:127.0.0.1:22 -p {{ autossh_remote.port }} -i /home/{{ item }}/.ssh/autossh_{{ autossh_keytype }}  {{ autossh_remote.username }}@{{ autossh_remote.address }}
+
+[Install]
+WantedBy=multi-user.target

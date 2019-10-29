@@ -1,14 +1,20 @@
 - name: set timezone
+  become: yes
   timezone:
     name: Asia/Tokyo
 - name: install essential application
+  become: yes
   apt: 
     name: "{{ packages }}"
     update_cache: yes
   vars: 
     packages: 
+      - axel
+      - ethtool
       - ipmitool
       - git
       - neovim
       - tmux
+      - unzip
+      - zip
       - zsh

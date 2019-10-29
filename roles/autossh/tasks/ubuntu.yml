@@ -1,0 +1,39 @@
+- name: install autossh
+  become: yes
+  apt:
+    name: autossh
+    update_cache: yes
+- name: ensure that ssh folder exists 
+  become_user: "{{ item }}"
+  file:
+    path: "/home/{{ item }}/.ssh"
+    state: directory
+  with_items: "{{ autossh_users }}"
+- name: create ssh keypair for autossh
+  become_user: "{{ item }}"
+  openssh_keypair:
+    path: "/home/{{ item }}/.ssh/autossh_{{ autossh_keytype }}"
+    type: "{{ autossh_keytype }}"
+  register: keyinfo
+  with_items: "{{ autossh_users }}"
+- name: append public key to authorized_keys 
+  debug:
+    msg:
+      hostname: "{{ ansible_hostname }}"
+      username: "{{ item.item }}"
+      public_key: "{{ item.public_key }}"
+  with_items: "{{ keyinfo.results }}"
+- name: register autossh service to systemd
+  become: yes
+  template:
+    src: autossh.service.j2
+    dest: "/lib/systemd/system/autossh@{{ item }}.service"
+  with_items: "{{ autossh_users }}"
+- name: start autossh service
+  become: yes
+  systemd:
+    name: "autossh@{{ item }}"
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  with_items: "{{ autossh_users }}"

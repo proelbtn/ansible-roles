@@ -1,0 +1,17 @@
+- name: install essential packages
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - libvirt-bin
+      - qemu
+      - qemu-kvm
+- name: append users to group libvirt
+  become: yes
+  user:
+    name: "{{ libvirt_users }}"
+    groups:
+      - libvirt
+    append: yes
