@@ -1,0 +1,20 @@
+- name: add common deb repositories
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: "{{ repositories }}"
+  vars:
+    repositories:
+      - deb http://ftp.jp.debian.org/debian/ buster main contrib non-free
+      - deb-src http://ftp.jp.debian.org/debian/ buster main contrib non-free
+
+- name: add additional deb repositories
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: "{{ debian_additional_repositories }}"
+  when: debian_additional_repositories is defined
+
+- include_tasks: ubuntu.yml

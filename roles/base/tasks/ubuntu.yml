@@ -1,7 +1,3 @@
-- name: set timezone
-  become: yes
-  timezone:
-    name: Asia/Tokyo
 - name: install essential application
   become: yes
   apt: 
@@ -10,10 +6,13 @@
   vars: 
     packages: 
       - axel
+      - curl
       - ethtool
       - ipmitool
       - git
+      - gpg
       - neovim
+      - tcpdump
       - tmux
       - unzip
       - zip

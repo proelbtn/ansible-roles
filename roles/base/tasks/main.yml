@@ -1,4 +1,10 @@
+- name: set timezone
+  become: yes
+  timezone:
+    name: Asia/Tokyo
 - include_tasks: centos.yml
   when: ansible_distribution == "CentOS"
+- include_tasks: debian.yml
+  when: ansible_distribution == "Debian"
 - include_tasks: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
