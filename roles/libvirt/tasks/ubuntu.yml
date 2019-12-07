@@ -8,6 +8,7 @@
       - libvirt-bin
       - qemu
       - qemu-kvm
+
 - name: append users to group libvirt
   become: yes
   user:
