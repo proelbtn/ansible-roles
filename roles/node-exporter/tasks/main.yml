@@ -1,37 +1,44 @@
 - name: create a user for node_exporter
+  become: yes
   user:
     state: present
     name: node_exporter
     system: yes
     home: /opt/node_exporter
     create_home: yes
+
 - name: download
+  become: yes
+  become_user: node_exporter
   get_url:
     url: https://github.com/prometheus/node_exporter/releases/download/v0.17.0/node_exporter-0.17.0.linux-amd64.tar.gz
-    checksum: sha256:d2e00d805dbfdc67e7291ce2d2ff151f758dd7401dd993411ff3818d0e231489
     dest: /opt/node_exporter/node_exporter-0.17.0.linux-amd64.tar.gz
-    owner: node_exporter
-    group: node_exporter
   register: tarinfo
+
 - name: unarchive
+  become: yes
+  become_user: node_exporter
   unarchive:
     src: "{{ tarinfo.dest }}"
     dest: /opt/node_exporter
     remote_src: yes
-    owner: node_exporter
-    group: node_exporter
+
 - name: create a systemd unit file
+  become: yes
+  become_user: node_exporter
   template:
     src: ../templates/node_exporter.service
-    dest: /opt/node_exporter/node_exporter-0.17.0.linux-amd64/node_exporter.service
-    owner: node_exporter
-    group: node_exporter
+    dest: /opt/node_exporter/node_exporter.service
+
 - name: create a symlink to the systemd unit file
+  become: yes
   file:
-    src: /opt/node_exporter/node_exporter-0.17.0.linux-amd64/node_exporter.service
+    src: /opt/node_exporter/node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
     state: link
+
 - name: start node_exporter
+  become: yes
   systemd:
     name: node_exporter
     state: restarted

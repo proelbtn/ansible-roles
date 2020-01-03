@@ -4,6 +4,7 @@ Description=Prometheus
 [Service]
 User=prometheus
 ExecStart=/opt/prometheus/prometheus-2.10.0.linux-amd64/prometheus
+WorkingDirectory=/opt/prometheus
 
 [Install]
 WantedBy=multi-user.target

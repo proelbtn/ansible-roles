@@ -1,4 +1,4 @@
-- name: install essential application
+- name: install essential applications (for bionic)
   become: yes
   apt: 
     name: "{{ packages }}"
@@ -11,9 +11,33 @@
       - ipmitool
       - git
       - gpg
+      - make
       - neovim
       - tcpdump
       - tmux
       - unzip
       - zip
       - zsh
+  when: ansible_distribution_release == "bionic"
+
+- name: install essential applications (for xenial)
+  become: yes
+  apt: 
+    name: "{{ packages }}"
+    update_cache: yes
+  vars: 
+    packages: 
+      - axel
+      - curl
+      - ethtool
+      - ipmitool
+      - git
+      - gpgv2
+      - make
+      - vim 
+      - tcpdump
+      - tmux
+      - unzip
+      - zip
+      - zsh
+  when: ansible_distribution_release == "xenial"
