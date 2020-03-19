@@ -36,8 +36,29 @@ scrape_configs:
 
     static_configs:
     - targets: 
-      - 'srv01.hy.proelbtn.com:9100'
-      - 'srv02.hy.proelbtn.com:9100'
-      - 'coredns.hy.proelbtn.com:9100'
-      - 'grafana.hy.proelbtn.com:9100'
-      - 'prometheus.hy.proelbtn.com:9100'
+{% for host in groups["monitored"] %}
+      - {{ host }}:9100
+{% endfor %}
+
+  - job_name: 'blackbox_exporter'
+    metrics_path: /probe
+    params:
+      module:
+      - icmp
+    static_configs:
+    - targets:
+      - 1.1.1.1
+      - 8.8.8.8
+      - 8.8.4.4
+      - 34.84.61.229
+      - 35.194.16.29
+{% for host in groups["monitored"] %}
+      - {{ host }}
+{% endfor %}
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: localhost:9115

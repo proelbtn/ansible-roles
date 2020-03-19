@@ -5,7 +5,7 @@ Description=Node Exporter
 
 [Service]
 User=node_exporter
-ExecStart=/opt/node_exporter/node_exporter-0.17.0.linux-amd64/node_exporter
+ExecStart=/opt/node_exporter/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
 WorkingDirectory=/opt/node_exporter/
 
 [Install]
